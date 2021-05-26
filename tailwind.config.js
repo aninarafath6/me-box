@@ -1,9 +1,19 @@
 module.exports = {
   mode: "jit",
-  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        gray: {
+          light: "#616161",
+          DEFAULT: "#343434",
+        },
+      },
+      borderColor: {
+        DEFAULT: "#202020",
+      },
+    },
   },
   variants: {
     extend: {},
