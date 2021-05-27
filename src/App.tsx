@@ -12,9 +12,9 @@ const App: FC = () => {
       <Header />
       <SideBar />
       <Home />
-    </div> : <div className='flex items-center justify-center p-2 h-screen  flex-col space-x-2'>
+    </div> : <div className='flex items-center justify-center p-2 h-screen  flex-col space-y-5 '>
       <img src="/logo.svg" alt="logo" className='h-24' />
-      <p className="text-lg text-center mt-3 text-gray-light font-mono">This Site Currently Running On Desktop</p>
+      <p className="text-lg text-center  text-gray-light font-mono">This Site Currently Running On Desktop</p>
     </div>
   );
 }
