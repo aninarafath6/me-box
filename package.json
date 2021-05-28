@@ -43,8 +43,11 @@
     ]
   },
   "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "autoprefixer": "^9",
     "postcss": "^7",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    "react-refresh": "^0.10.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "type-fest": "^1.1.3"
   }
 }

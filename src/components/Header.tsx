@@ -6,7 +6,7 @@ import { CogIcon, HeartIcon } from '@heroicons/react/solid'
 
 const Header: FC = () => {
     return (
-        <header className="border-b border" >
+        <header className="border-b border sticky" >
             <div className="flex justify-between p-3 px-4">
 
                 {/* left section */}

@@ -11,7 +11,7 @@ const App: FC = () => {
   return (
     isBigScreen ? <div className="App ">
       <Header />
-      <div className='flex'>
+      <div className='flex fixed'>
         <SideBar />
         <Folders />
         <Home />
