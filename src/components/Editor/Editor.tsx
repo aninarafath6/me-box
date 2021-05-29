@@ -2,11 +2,8 @@ import React, {
     ChangeEvent,
     FC, MouseEvent, MutableRefObject, useRef, useState
 } from 'react'
+import {mouseMoveEvent} from './editor.model'
 import MonacoEditor from '@monaco-editor/react'
-// interface of mousemove event
-interface mouseMoveEvent {
-    clientX: number;
-}
 
 const Editor: FC = () => {
     const [width, setWidth] = useState<number>(600);

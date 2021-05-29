@@ -1,8 +1,8 @@
 import { FC } from "react";
-import Editor from "../components/Editor";
-import Folders from "../components/Folders";
-import Header from "../components/Header";
-import SideBar from "../components/SideBar";
+import Editor from "../components/Editor/Editor";
+import Folders from "../components/Folders/Folders";
+import Header from "../components/header/Header";
+import SideBar from "../components/sidebar/SideBar";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 
 const Home: FC = () => {

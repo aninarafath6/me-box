@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent, MutableRefObject, useRef, useState } from 'react'
-import Accordion from './Accordion';
+import Accordion from '../accordion/Accordion';
 
 // interface of mousemove event
 interface mouseMoveEvent {
@@ -51,11 +51,11 @@ const Folders: FC = () => {
     let obj = {
         "name": "My App",
         "file": ["index.html", "index.js"],
-        "folders": [{ "name": "styles", "files": ["main.css",'app.js'] }, { "name": "public", "files": ["main.css"] }]
+        "folders": [{ "name": "styles", "files": [{name:"main.css",extension:'css'},{name:'app.js',extension:'js'}] }, { "name": "public", "files": ["main.css"] }]
     }
-    const onOpenHandler =(folderName:string):void =>{
-        setActiveFolder(folderName)
-    }
+    // const onOpenHandler =(folderName:string):void =>{
+    //     setActiveFolder(folderName)
+    // }
 
     return (
         <aside style={{ width: `${width}px`, minWidth: '200px' }} className='relative   border-r  h-screen  flex flex-col ' ref={divRef} >
@@ -69,7 +69,7 @@ const Folders: FC = () => {
                     // console.log(folder);
                  
                     return (
-                       <Accordion key={i}  active={active} folderName={folder.name} files={folder.files}/>
+                       <Accordion key={i}  active={active} folderName={folder.name} files={folder}/>
                     )
                 })
             }
