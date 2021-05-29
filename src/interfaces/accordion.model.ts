@@ -7,7 +7,7 @@ export interface AccordionProps {
     };
 }
 
-interface FileType   {
-    name:string,
-    extension:'js'|'css'
+export interface FileType {
+    name: string;
+    extension: 'js' | 'css' | 'html' | 'json';
 }

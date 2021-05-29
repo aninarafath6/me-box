@@ -1,8 +1,8 @@
-import React, { Key, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/solid'
-import { imageBaseURL } from '../../utils/constants'
-import commands from '../../utils/commands'
-import { AccordionProps } from './accordion.model'
+import { imageBaseURL } from '../utils/constants'
+import {commands} from '../utils/commands'
+import { AccordionProps } from '../interfaces/accordion.model'
 
 
 

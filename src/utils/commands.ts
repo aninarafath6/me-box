@@ -1,4 +1,6 @@
-export default  {
+export const commands = {
     js:'javascript',
-    css:'css'
+    css:'css',
+    html:'html',
+    json:'json'
 }

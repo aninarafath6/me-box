@@ -2,7 +2,7 @@ import React, {
     ChangeEvent,
     FC, MouseEvent, MutableRefObject, useRef, useState
 } from 'react'
-import {mouseMoveEvent} from './editor.model'
+import {mouseMoveEvent} from '../interfaces/editor.model'
 import MonacoEditor from '@monaco-editor/react'
 
 const Editor: FC = () => {
