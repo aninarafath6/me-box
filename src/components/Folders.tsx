@@ -8,7 +8,11 @@ interface mouseMoveEvent {
 
 const Folders: FC = () => {
     const [width, setWidth] = useState<number>(200);
-
+    const [activeFolder,setActiveFolder] =useState<string>('')
+    const active ={
+        setActiveFolder,
+        activeFolder, 
+    }
     //refs 
     const divRef = useRef() as MutableRefObject<HTMLDivElement>;
 
@@ -47,10 +51,11 @@ const Folders: FC = () => {
     let obj = {
         "name": "My App",
         "file": ["index.html", "index.js"],
-        "folders": [{ "name": "styles", "files": ["main.css"] }, { "name": "public", "files": ["main.css"] }]
+        "folders": [{ "name": "styles", "files": ["main.css",'app.js'] }, { "name": "public", "files": ["main.css"] }]
     }
-
-
+    const onOpenHandler =(folderName:string):void =>{
+        setActiveFolder(folderName)
+    }
 
     return (
         <aside style={{ width: `${width}px`, minWidth: '200px' }} className='relative   border-r  h-screen  flex flex-col ' ref={divRef} >
@@ -58,13 +63,13 @@ const Folders: FC = () => {
             <div className='border-b p-3 py-2'>
                 <p className='text-xs font-bold'>{obj.name}</p>
             </div>
-            <div className="space-y-3 p-3">
+            <div className=" mt-2">
             {
-                obj.folders.map((folder) => {
-                    console.log(folder);
-                    
+                obj.folders.map((folder,i) => {
+                    // console.log(folder);
+                 
                     return (
-                       <Accordion folderName={folder.name} files={folder.files}/>
+                       <Accordion key={i}  active={active} folderName={folder.name} files={folder.files}/>
                     )
                 })
             }

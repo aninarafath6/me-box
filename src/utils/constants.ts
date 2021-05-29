@@ -1,0 +1,1 @@
+export const imageBaseURL = 'https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/8da6dcd12303252a3f9371980eccd9649984c077/icons/'
