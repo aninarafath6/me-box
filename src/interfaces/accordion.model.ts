@@ -1,13 +1,22 @@
 export interface AccordionProps {
-    folderName: string;
-    files: FileType[];
-    active: {
-        activeFolder: string;
-        setActiveFolder: React.Dispatch<React.SetStateAction<any>>;
-    };
+  folderName: string;
+  files: FileType[];
+  active: {
+    activeFolder: string;
+    setActiveFolder: React.Dispatch<React.SetStateAction<any>>;
+  };
 }
 
 export interface FileType {
-    name: string;
-    extension: 'js' | 'css' | 'html' | 'json';
+  name: string;
+  extension:
+    | "js"
+    | "css"
+    | "html"
+    | "json"
+    | "git"
+    | "md"
+    | "nodejs"
+    | "svg"
+    | "txt";
 }

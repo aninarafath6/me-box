@@ -1,16 +1,23 @@
-
 export interface DataObjectType {
-    name: string;
-    file: string[];
-    folders: FolderType[];
-    
+  name: string;
+  files: FileType[];
+  folders: FolderType[];
 }
 interface FileType {
-    name: string;
-    extension: 'js' | 'css' | 'html'|'json';
+  name: string;
+  extension:
+    | "js"
+    | "css"
+    | "html"
+    | "json"
+    | "git"
+    | "md"
+    | "nodejs"
+    | "svg"
+    | "txt";
 }
 
 interface FolderType {
-    name: string;
-    files: FileType[]
+  name: string;
+  files: FileType[];
 }
