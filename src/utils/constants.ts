@@ -1,1 +1,2 @@
-export const imageBaseURL = 'https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/8da6dcd12303252a3f9371980eccd9649984c077/icons/'
+export const iconsBaseURL = 'https://cdn.jsdelivr.net/gh/PKief/vscode-material-icon-theme@master/icons/'
+export const folderIconBaseUrl = 'https://codesandbox.io/static/media/'
