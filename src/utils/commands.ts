@@ -1,4 +1,4 @@
-export const commands = {
+export const commands:any = {
   js: "javascript",
   css: "css",
   html: "html",

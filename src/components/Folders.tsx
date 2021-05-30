@@ -1,7 +1,10 @@
 import React, {
+  ChangeEvent,
   FC,
+  KeyboardEvent,
   MouseEvent,
   MutableRefObject,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -9,8 +12,9 @@ import React, {
 import Accordion from "./Accordion";
 import { iconsBaseURL } from "../utils/constants";
 import { commands } from "../utils/commands";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FileType } from "../interfaces/accordion.model";
+import { createFile } from "../redux/acions/FileAction";
 // interface of mousemove event
 interface mouseMoveEvent {
   clientX: number;
@@ -37,12 +41,34 @@ const Folders: FC = () => {
   const [width, setWidth] = useState<number>(200);
   //state of active
   const [activeFolder, setActiveFolder] = useState<string>("");
+  // active New Folder
+  const [activeNewFile, setActiveNewFile] = useState<boolean>(false);
+  // input ref
+  const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
+  //extension
+  const [extension, setExtension] = useState<any>("txt");
+  // extension types
+  const [extensionTypes, setExtensionTypes] = useState<string[]>([]);
+  //new file name
+  const [newFileName, setNewFileName] = useState<string>("");
+  //refs
+  const divRef = useRef() as MutableRefObject<HTMLDivElement>;
+
+  // dispatches
+  const dispatch = useDispatch();
+
   const active = {
     setActiveFolder,
     activeFolder,
   };
-  //refs
-  const divRef = useRef() as MutableRefObject<HTMLDivElement>;
+
+  useEffect(() => {
+    let types = [];
+    for (const [key] of Object.entries(commands)) {
+      types.push(key);
+    }
+    setExtensionTypes(types);
+  }, []);
 
   // mouse down handler
   const mouseDownHandler = (e: MouseEvent<HTMLDivElement>) => {
@@ -73,12 +99,54 @@ const Folders: FC = () => {
       window.removeEventListener("mousemove", mouseMove);
     }
   };
+  const onCreateFileHandler = () => {
+    setActiveNewFile((prev) => !prev);
+  };
 
+  // on key up handler
+  const submitHandler = (event: KeyboardEvent<HTMLInputElement>): void => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      setActiveNewFile(false);
+      dispatch(createFile({ name: newFileName, extension: extension }));
+      setNewFileName("");
+      setExtension("txt");
+    }
+  };
 
-  const onCreateFileHandler =()=>{
-
-  }
-
+  const onFileTitleChangeHandler = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    const title = event.target.value;
+    const ext = title.split(".").pop();
+    setNewFileName(title);
+    let valid = extensionTypes.filter((ex) => ex === ext);
+    if (valid[0]) {
+      setExtension(
+        title === "package.json"
+          ? "nodejs"
+          : title === "package.lock.json"
+          ? "nodejs"
+          : title === "yarn.lock"
+          ? "yarn"
+          : title === ".gitignore"
+          ? "git"
+          : valid[0]
+      );
+    } else {
+      setExtension(
+        title === "package.json"
+          ? "nodejs"
+          : title === "package.lock.json"
+          ? "nodejs"
+          : title === "yarn.lock"
+          ? "yarn"
+          : title === ".gitignore"
+          ? "git"
+          : "txt"
+      );
+    }
+  };
   return (
     <aside
       style={{ width: `${width}px`, minWidth: "200px" }}
@@ -97,7 +165,8 @@ const Folders: FC = () => {
         {/* //right section */}
         <div className="space-x-1 hidden group-hover:flex">
           {/* svg of file icons */}
-          <svg onClick={onCreateFileHandler}
+          <svg
+            onClick={onCreateFileHandler}
             className="cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out"
             width="16"
             height="16"
@@ -134,6 +203,29 @@ const Folders: FC = () => {
             />
           );
         })}
+        <div
+          className={`space-x-2 items-center cursor-pointer bg-gray hover:bg-transparent flex ${
+            !activeNewFile && "hidden"
+          }`}
+        >
+          <div className="py-1 px-2 space-x-2 items-center cursor-pointer flex">
+            <img
+              className="h-4"
+              src={`${iconsBaseURL}${commands[extension]}.svg`}
+              alt=""
+            />
+            <p className="text-xs truncate text-gray-light ">
+              <input
+                value={newFileName}
+                ref={inputRef}
+                onKeyUp={submitHandler}
+                type="text"
+                onChange={onFileTitleChangeHandler}
+                className="bg-gray p-1 w-full border border-gray-light rounded-sm outline-none focus:outline-none "
+              />
+            </p>
+          </div>
+        </div>
         {dataFiles?.files?.map((file, i) => {
           return (
             <div
@@ -143,7 +235,9 @@ const Folders: FC = () => {
               <div className="py-1 px-2 space-x-2 items-center cursor-pointer flex">
                 <img
                   className="h-4"
-                  src={`${iconsBaseURL}${commands[file.extension]}.svg`}
+                  src={`${iconsBaseURL}${
+                    commands[file.extension] || "txt"
+                  }.svg`}
                   alt=""
                 />
                 <p className="text-xs truncate text-gray-light ">{file.name}</p>
