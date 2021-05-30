@@ -23,7 +23,7 @@ const Accordion = ({ folderName, files }: AccordionProps) => {
 
                 {/* //right section */}
                 <div className='space-x-1 hidden group-hover:flex'>
-                    <svg className='cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out' width="16" height="16" fill="none" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.284 2.5H4.5A.5.5 0 004 3v10a.5.5 0 00.5.5h7a.5.5 0 00.5-.5V6.08L8.284 2.5zM8 3l3.5 3.5H8V3z" clip-rule="evenodd"></path></svg>
+                    <svg className='cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out' width="16" height="16" fill="none" viewBox="0 0 16 16"><path fillRule="evenodd" d="M8.284 2.5H4.5A.5.5 0 004 3v10a.5.5 0 00.5.5h7a.5.5 0 00.5-.5V6.08L8.284 2.5zM8 3l3.5 3.5H8V3z" clipRule="evenodd"></path></svg>
                     <svg className='cursor-pointer fill-current text-[#8a8a8a] hover:text-white transition-all duration-300 ease-in-out' width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M6.5 3.5H3a.5.5 0 00-.5.5v8.5a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V5.167a.5.5 0 00-.5-.5H8l-1.167-1.04A.5.5 0 006.5 3.5z"></path></svg>
                 </div>
             </div>

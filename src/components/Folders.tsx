@@ -6,15 +6,29 @@ import React, {
   useState,
 } from "react";
 import Accordion from "./Accordion";
-import { DataObjectType } from "../interfaces/folders.model";
 import { iconsBaseURL } from "../utils/constants";
 import { commands } from "../utils/commands";
+import { useSelector } from "react-redux";
+import { FileType } from "../interfaces/accordion.model";
 // interface of mousemove event
 interface mouseMoveEvent {
   clientX: number;
 }
 
+interface RootState{
+  dataFile:{
+    name:string;
+    files: FileType[];
+    folders: FolderType[]
+  }
+}
+interface FolderType {
+  name: string;
+  files:FileType[]
+}
+
 const Folders: FC = () => {
+  const dataFiles = useSelector((state:Partial<RootState>) => state.dataFile)  
   const [width, setWidth] = useState<number>(200);
   const [activeFolder, setActiveFolder] = useState<string>("");
   const active = {
@@ -24,7 +38,7 @@ const Folders: FC = () => {
   //refs
   const divRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-  // mouse down handiler
+  // mouse down handler
   const mouseDownHandler = (e: MouseEvent<HTMLDivElement>) => {
     //mouse move listener
     window.addEventListener("mousemove", mouseMove);
@@ -53,38 +67,6 @@ const Folders: FC = () => {
       window.removeEventListener("mousemove", mouseMove);
     }
   };
-  let dataObject: DataObjectType = {
-    name: "My App",
-    files: [
-      { name: ".gitignore", extension: "git" },
-      { name: "README.md", extension: "md" },
-      { name: "package.json", extension: "nodejs" },
-      { name: "package.lock.json", extension: "nodejs" },
-    ],
-    folders: [
-      {
-        name: "public",
-        files: [
-          { name: "index.html", extension: "html" },
-          { name: "logo.svg", extension: "svg" },
-          { name: "robots.txt", extension: "txt" },
-
-        ],
-      },
-      {
-        name: "src",
-        files: [
-          { name: "App.js", extension: "js" },
-          { name: "App.css", extension: "css" },
-          { name: "index.js", extension: "js" },
-          { name: "index.css", extension: "css" },
-        ],
-      },
-    ],
-  };
-  // const onOpenHandler =(folderName:string):void =>{
-  //     setActiveFolder(folderName)
-  // }
 
   return (
     <aside
@@ -97,10 +79,10 @@ const Folders: FC = () => {
         onMouseDown={mouseDownHandler}
       />
       <div className="border-b p-3 py-2">
-        <p className="text-xs font-bold">{dataObject.name}</p>
+        <p className="text-xs font-bold">{dataFiles?.name}</p>
       </div>
       <div className=" mt-2">
-        {dataObject.folders?.map((folder, i) => {
+        {dataFiles?.folders?.map((folder, i) => {
           // console.log(folder);
           return (
             <Accordion
@@ -111,7 +93,7 @@ const Folders: FC = () => {
             />
           );
         })}
-        {dataObject.files?.map((file, i) => {
+        {dataFiles?.files?.map((file, i) => {
           return (
             <div
               key={i}
