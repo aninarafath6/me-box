@@ -8,5 +8,6 @@ export interface dtaFileType {
 
 interface FolderType {
   name: string;
-  files?: FileType[];
+  isOpen:Required<boolean>;
+  files: FileType[];
 }

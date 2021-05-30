@@ -8,5 +8,5 @@ export const commands = {
   nodejs: "nodejs",
   svg: "svg",
   txt: "file",
-  
+  yarn: "yarn",
 };
