@@ -12,7 +12,7 @@ const Header: FC = () => {
                 {/* left section */}
                 <div className="flex space-x-3 items-center">
                     <MenuAlt2Icon className="h-5 text-gray-500 cursor-pointer hover:text-white duration-200 transition-all ease-in-out " />
-                    <p className="text-xs cursor-pointer">CodeSandbox</p>
+                    <p className="text-xs cursor-pointer">Me Box</p>
                 </div>
 
 
@@ -43,7 +43,7 @@ const Header: FC = () => {
                         <p className="text-xs">Fork</p>
                     </div>
                     <div className="bg-gray p-1 rounded flex px-2 py-1 space-x-1 cursor-pointer hover:bg-gray-light" >
-                        <p className="text-xs">Create Sandbox</p>
+                        <p className="text-xs">Create me-box</p>
                     </div>
                     <div className="bg-blue-600 p-1 rounded flex px-2 py-1 space-x-1 cursor-pointer hover:bg-blue-500" >
                         <p className="text-xs">Sign in</p>
