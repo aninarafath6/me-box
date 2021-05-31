@@ -2,7 +2,7 @@ import { commands } from "../utils/commands";
 import { iconsBaseURL } from "../utils/constants";
 import { XIcon, PencilIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
-import { deleteFileAction, editFileAction } from "../redux/acions/FileAction";
+import { deleteFileAction, editFileAction } from "../redux/acions/fileAction";
 import { FileType } from "../interfaces/file.model";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import tippy from "tippy.js";
@@ -90,8 +90,6 @@ const Files = ({ file, className, isEditing, setIsEditing }: FileProps) => {
           ? "nodejs"
           : title === "yarn.lock"
           ? "yarn"
-          : title === ".gitignore"
-          ? "git"
           : valid[0]
       );
     } else {

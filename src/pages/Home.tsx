@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Editor from "../components/Editor";
-import Folders from "../components/Folders";
+import Folders from "../components/FileExplorer";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import { useMediaQuery } from "../hooks/useMediaQuery";

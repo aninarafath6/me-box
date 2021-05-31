@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux'
-import folderReducer from '../reducers/folderReducer'
+import folderReducer from './fileExploreReducer'
 
 const rootReducer = combineReducers({
 dataFile:folderReducer,

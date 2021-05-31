@@ -1,7 +1,8 @@
-import { CreateFileAction } from "../../interfaces/reduce.model";
+import { FileExplorerReducer } from "../../interfaces/reduce.model";
 import { dtaFileType } from "../../interfaces/dtaFileType.mode";
 import { commands } from "../../utils/commands";
 import { CREATE_FILE, DELETE_FILE, EDIT_FILE } from "../types/fileTypes";
+import { CREATE_FOLDER } from "../types/folderTypes";
 
 // initial state
 const initialState: dtaFileType = {
@@ -11,7 +12,10 @@ const initialState: dtaFileType = {
 };
 
 // folder reducer
-const folderReducer = (state = initialState, action: CreateFileAction) => {
+const fileExplorerReducer = (
+  state = initialState,
+  action: FileExplorerReducer
+) => {
   let extensionTypes = [];
   // global variables
   let extension, valid;
@@ -31,8 +35,11 @@ const folderReducer = (state = initialState, action: CreateFileAction) => {
       // checking extension exist if extension is not exist put txt extension
       var ext = action.payload.name.split(".").pop();
       valid = extensionTypes.filter((ex) => ex === ext);
-      if (!valid[0] && action.payload.name !== "yarn.lock") {
-        action.payload.name = action.payload.name + ".txt";
+      if (
+        !valid[0] &&
+        action.payload.name !== "yarn.lock" &&
+        ext !== "gitignore"
+      ) {
       }
 
       // separating extension with name
@@ -87,7 +94,11 @@ const folderReducer = (state = initialState, action: CreateFileAction) => {
       // checking extension exist if extension is not exist put txt extension
       var ext = action.payload.name.split(".").pop();
       valid = extensionTypes.filter((ex) => ex === ext);
-      if (!valid[0] && action.payload.name !== "yarn.lock") {
+      if (
+        !valid[0] &&
+        action.payload.name !== "yarn.lock" &&
+        ext !== "gitignore"
+      ) {
         action.payload.name = action.payload.name + ".txt";
       }
 
@@ -121,8 +132,21 @@ const folderReducer = (state = initialState, action: CreateFileAction) => {
       return {
         ...state,
       };
+
+    case CREATE_FOLDER:
+      return {
+        ...state,
+        folders: [
+          ...state.folders,
+          {
+            id: action.payload.id,
+            name: action.payload.name,
+          },
+        ],
+      };
+
     default:
       return state;
   }
 };
-export default folderReducer;
+export default fileExplorerReducer;

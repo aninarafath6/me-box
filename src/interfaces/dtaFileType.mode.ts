@@ -7,7 +7,7 @@ export interface dtaFileType {
 }
 
 export interface FolderType {
+  id: number;
   name: string;
-  isOpen:Required<boolean>;
   files: FileType[];
 }

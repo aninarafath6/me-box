@@ -1,17 +1,15 @@
+import { FolderType } from "./dtaFileType.mode";
 import { FileType } from "./file.model";
 
-export interface CreateFileAction {
-    type:Required<string>;
-    payload:{
-        id:number
-        name: string;
-    }
+export interface FileExplorerReducer {
+  type: string;
+  payload: {
+    id: number;
+    name: string;
+    files: FileType[];
+    folders: FolderType[]
+  };
 }
 
-export interface DeleteFileAction{
-    type:string,
-    payload:{
-        id:number
-    }
-}
+
 

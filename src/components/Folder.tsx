@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import { folderIconBaseUrl, iconsBaseURL } from "../utils/constants";
 import { commands } from "../utils/commands";
 import { FolderProps } from "../interfaces/Folder.mode";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/animations/scale.css";
 
-const Folder = ({ folderName, files }: FolderProps) => {
+const Folder = ({ folderName, files,className }: FolderProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  let tooltipOptions = {
+    theme: "light",
+    inertia: true,
+    arrow: false,
+    delay: 500,
+  };
+  useEffect(() => {
+    // tippy js for tool tip
+    tippy(".new-file", {
+      ...tooltipOptions,
+      content: "New File",
+    });
+    tippy(".new-folder", {
+      ...tooltipOptions,
+      content: "New Folder",
+    });
+  
+  }, []);
 
   return (
     <div className="space-y-1">
       <div
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex  items-center justify-between cursor-pointer group ${
-          isOpen && "bg-gray hover:bg-transparent border-b border-t "
+        className={`${className} flex  items-center justify-between cursor-pointer group ${
+          className && "hover:bg-transparent border-b border-t "
         } py-1 px-2`}
       >
         {/* //left section */}
@@ -34,7 +56,7 @@ const Folder = ({ folderName, files }: FolderProps) => {
         {/* //right section */}
         <div className="space-x-1 hidden group-hover:flex">
           <svg
-            className="cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out"
+            className=" new-file cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out"
             width="16"
             height="16"
             fill="none"
@@ -47,7 +69,7 @@ const Folder = ({ folderName, files }: FolderProps) => {
             ></path>
           </svg>
           <svg
-            className="cursor-pointer fill-current text-[#8a8a8a] hover:text-white transition-all duration-300 ease-in-out"
+            className=" new-folder cursor-pointer fill-current text-[#8a8a8a] hover:text-white transition-all duration-300 ease-in-out"
             width="16"
             height="16"
             fill="none"

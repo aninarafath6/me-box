@@ -9,16 +9,18 @@ import React, {
   useState,
 } from "react";
 
-import { iconsBaseURL } from "../utils/constants";
+import { folderIconBaseUrl, iconsBaseURL } from "../utils/constants";
 import { commands } from "../utils/commands";
 import { useDispatch, useSelector } from "react-redux";
-import { createFileAction } from "../redux/acions/FileAction";
+import { createFileAction } from "../redux/acions/fileAction";
 import Folder from "./Folder";
 import File from "./File";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
 import { FileType } from "../interfaces/file.model";
+import { createFolderAction } from "../redux/acions/folderAction";
+import { FolderType } from "../interfaces/dtaFileType.mode";
 // interface of mousemove event
 interface mouseMoveEvent {
   clientX: number;
@@ -32,32 +34,26 @@ interface RootState {
   };
 }
 
-//interface of folder type
-interface FolderType {
-  name: string;
-  files: FileType[];
-}
-
-const Folders: FC = () => {
+const FileExplorer: FC = () => {
   // files from global store
   const dataFiles = useSelector((state: Partial<RootState>) => state.dataFile);
   // width of side bar
   const [width, setWidth] = useState<number>(200);
   //state of active
-  const [activeNewFile, setActiveNewFile] = useState<boolean>(false);
+  const [activeNewFileOrFolderInput, setActiveNewFileOrFolderInput] =
+    useState<string>("");
   //extension
   const [extension, setExtension] = useState<any>("txt");
   // extension types
   const [extensionTypes, setExtensionTypes] = useState<string[]>([]);
   //new file name
-  const [newFileName, setNewFileName] = useState<string>("");
+  const [newFileOrFolderName, setNewFileOrFolderName] = useState<string>("");
   //refs
   const divRef = useRef() as MutableRefObject<HTMLDivElement>;
   // file active
-  const [active, setActive] = useState<string>("");
+  const [active, setActive] = useState<number>();
   // is file isEditing
-  const [isEditing, setIsEditing] = useState<string>('');
-
+  const [isEditing, setIsEditing] = useState<string>("");
 
   // dispatches
   const dispatch = useDispatch();
@@ -125,23 +121,38 @@ const Folders: FC = () => {
 
   // on create file handler
   const onCreateFileHandler = () => {
-    setActiveNewFile((prev) => !prev);
+    setActiveNewFileOrFolderInput("file");
+  };
+
+  // on create folder handler
+  const onCreateFolderHandler = (): void => {
+    setActiveNewFileOrFolderInput("folder");
   };
 
   // on key up handler
   const submitHandler = (event: KeyboardEvent<HTMLInputElement>): void => {
-    // event key == 13 13 key is enter 
+    // event key == 13 13 key is enter
     if (event.keyCode === 13) {
       // preventing reload
       event.preventDefault();
       // hiding active input
-      setActiveNewFile(false);
-      // creating new file
-      dispatch(
-        createFileAction({ id: Date.now(), name: newFileName, extension: extension })
-      );
+      setActiveNewFileOrFolderInput("");
+      if (activeNewFileOrFolderInput === "file") {
+        // creating new file
+        dispatch(
+          createFileAction({
+            id: Date.now(),
+            name: newFileOrFolderName,
+            extension: extension,
+          })
+        );
+      } else {
+        dispatch(
+          createFolderAction({ id: Date.now(), name: newFileOrFolderName })
+        );
+      }
       // setting file name into default null
-      setNewFileName("");
+      setNewFileOrFolderName("");
       // setting extension into default .txt
       setExtension("txt");
     }
@@ -153,7 +164,7 @@ const Folders: FC = () => {
   ): void => {
     const title = event.target.value;
     const ext = title.split(".").pop();
-    setNewFileName(title);
+    setNewFileOrFolderName(title);
     let valid = extensionTypes.filter((ex) => ex === ext);
     if (valid[0]) {
       setExtension(
@@ -188,10 +199,13 @@ const Folders: FC = () => {
       className="relative   border-r  h-screen  flex flex-col "
       ref={divRef}
     >
+      {/* width extend bar  */}
       <div
         className="absolute top-0 bottom-0 right-0 bg-gray w-1 cursor-move opacity-0 active:opacity-100 transform transition-all duration-100 ease-in-out "
         onMouseDown={mouseDownHandler}
       />
+
+      {/* folder name and actions  */}
       <div className="group flex justify-between border-b p-3 py-2">
         {/* left section  */}
         <div className="">
@@ -216,6 +230,7 @@ const Folders: FC = () => {
             ></path>
           </svg>
           <svg
+            onClick={onCreateFolderHandler}
             className=" focus:outline-none new-folder cursor-pointer fill-current text-[#8a8a8a] hover:text-white transition-all duration-300 ease-in-out"
             width="16"
             height="16"
@@ -227,26 +242,34 @@ const Folders: FC = () => {
         </div>
       </div>
       <div className=" mt-2">
+        {/* folders  */}
         {dataFiles?.folders?.map((folder, i) => {
           return (
-            <Folder key={i} folderName={folder.name} files={folder.files} />
+                
+                <div onClick={() => setActive(folder.id)}><Folder className={folder.id === active ? "bg-gray" :'' } key={i} folderName={folder.name} files={folder.files} /></div>
           );
         })}
+
+        {/* new file create input  */}
         <div
           className={`space-x-2 items-center cursor-pointer bg-gray hover:bg-transparent flex ${
-            !activeNewFile && "hidden"
+            activeNewFileOrFolderInput === "" && "hidden"
           }`}
         >
           <div className="py-1 px-2 space-x-2 items-center cursor-pointer flex">
             <img
               className="h-4"
-              src={`${iconsBaseURL}${commands[extension]}.svg`}
+              src={`${
+                activeNewFileOrFolderInput === "file"
+                  ? `${iconsBaseURL}${commands[extension]}`
+                  : `${folderIconBaseUrl}folder.31ca7ee0`
+              }.svg`}
               alt=""
             />
             <p className="text-xs truncate text-gray-light ">
               <input
                 autoFocus
-                value={newFileName}
+                value={newFileOrFolderName}
                 onKeyUp={submitHandler}
                 type="text"
                 onChange={onFileTitleChangeHandler}
@@ -257,12 +280,12 @@ const Folders: FC = () => {
         </div>
         {dataFiles?.files?.map((file, i) => {
           return (
-            <div onClick={() => setActive(file.name)}>
+            <div onClick={() => setActive(file.id)}>
               {" "}
               <File
                 setIsEditing={setIsEditing}
-                className={file.name === active ? "bg-gray" : ""}
-                isEditing={file.name === isEditing ?true :false}
+                className={file.id === active ? "bg-gray" :'' }
+                isEditing={file.name === isEditing ? true : false}
                 key={i}
                 file={file}
               />
@@ -274,4 +297,4 @@ const Folders: FC = () => {
   );
 };
 
-export default Folders;
+export default FileExplorer;
