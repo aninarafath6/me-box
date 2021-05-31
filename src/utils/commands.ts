@@ -1,4 +1,4 @@
-export const commands:any = {
+export const commands: any = {
   js: "javascript",
   css: "css",
   html: "html",
@@ -9,4 +9,7 @@ export const commands:any = {
   svg: "svg",
   txt: "file",
   yarn: "yarn",
+  jsx: "react",
+  ts:'typescript'
+
 };

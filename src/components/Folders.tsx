@@ -9,12 +9,16 @@ import React, {
   useState,
 } from "react";
 
-import Accordion from "./Accordion";
 import { iconsBaseURL } from "../utils/constants";
 import { commands } from "../utils/commands";
 import { useDispatch, useSelector } from "react-redux";
-import { FileType } from "../interfaces/accordion.model";
-import { createFile } from "../redux/acions/FileAction";
+import { createFileAction } from "../redux/acions/FileAction";
+import Folder from "./Folder";
+import File from "./File";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/animations/scale.css";
+import { FileType } from "../interfaces/file.model";
 // interface of mousemove event
 interface mouseMoveEvent {
   clientX: number;
@@ -40,11 +44,7 @@ const Folders: FC = () => {
   // width of side bar
   const [width, setWidth] = useState<number>(200);
   //state of active
-  const [activeFolder, setActiveFolder] = useState<string>("");
-  // active New Folder
   const [activeNewFile, setActiveNewFile] = useState<boolean>(false);
-  // input ref
-  const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
   //extension
   const [extension, setExtension] = useState<any>("txt");
   // extension types
@@ -53,21 +53,44 @@ const Folders: FC = () => {
   const [newFileName, setNewFileName] = useState<string>("");
   //refs
   const divRef = useRef() as MutableRefObject<HTMLDivElement>;
+  // file active
+  const [active, setActive] = useState<string>("");
+  // is file isEditing
+  const [isEditing, setIsEditing] = useState<string>('');
+
 
   // dispatches
   const dispatch = useDispatch();
 
-  const active = {
-    setActiveFolder,
-    activeFolder,
+  let tooltipOptions = {
+    theme: "light",
+    inertia: true,
+    arrow: false,
+    delay: 500,
   };
 
   useEffect(() => {
+    // taking all extension from commands
     let types = [];
     for (const [key] of Object.entries(commands)) {
       types.push(key);
     }
+    // setting extension
     setExtensionTypes(types);
+
+    // tippy js for tool tip
+    tippy(".new-file", {
+      ...tooltipOptions,
+      content: "New File",
+    });
+    tippy(".new-folder", {
+      ...tooltipOptions,
+      content: "New Folder",
+    });
+    tippy(".remove-file", {
+      ...tooltipOptions,
+      content: "Delete File ",
+    });
   }, []);
 
   // mouse down handler
@@ -99,21 +122,32 @@ const Folders: FC = () => {
       window.removeEventListener("mousemove", mouseMove);
     }
   };
+
+  // on create file handler
   const onCreateFileHandler = () => {
     setActiveNewFile((prev) => !prev);
   };
 
   // on key up handler
   const submitHandler = (event: KeyboardEvent<HTMLInputElement>): void => {
+    // event key == 13 13 key is enter 
     if (event.keyCode === 13) {
+      // preventing reload
       event.preventDefault();
+      // hiding active input
       setActiveNewFile(false);
-      dispatch(createFile({ name: newFileName, extension: extension }));
+      // creating new file
+      dispatch(
+        createFileAction({ id: Date.now(), name: newFileName, extension: extension })
+      );
+      // setting file name into default null
       setNewFileName("");
+      // setting extension into default .txt
       setExtension("txt");
     }
   };
 
+  // onchange of new file
   const onFileTitleChangeHandler = (
     event: ChangeEvent<HTMLInputElement>
   ): void => {
@@ -147,6 +181,7 @@ const Folders: FC = () => {
       );
     }
   };
+
   return (
     <aside
       style={{ width: `${width}px`, minWidth: "200px" }}
@@ -167,7 +202,7 @@ const Folders: FC = () => {
           {/* svg of file icons */}
           <svg
             onClick={onCreateFileHandler}
-            className="cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out"
+            className=" focus:outline-none outline-none new-file cursor-pointer fill-current text-[#8a8a8a]  hover:text-white transition-all duration-300 ease-in-out"
             width="16"
             height="16"
             fill="none"
@@ -181,7 +216,7 @@ const Folders: FC = () => {
             ></path>
           </svg>
           <svg
-            className="cursor-pointer fill-current text-[#8a8a8a] hover:text-white transition-all duration-300 ease-in-out"
+            className=" focus:outline-none new-folder cursor-pointer fill-current text-[#8a8a8a] hover:text-white transition-all duration-300 ease-in-out"
             width="16"
             height="16"
             fill="none"
@@ -193,14 +228,8 @@ const Folders: FC = () => {
       </div>
       <div className=" mt-2">
         {dataFiles?.folders?.map((folder, i) => {
-          // console.log(folder);
           return (
-            <Accordion
-              key={i}
-              active={active}
-              folderName={folder.name}
-              files={folder.files}
-            />
+            <Folder key={i} folderName={folder.name} files={folder.files} />
           );
         })}
         <div
@@ -216,32 +245,27 @@ const Folders: FC = () => {
             />
             <p className="text-xs truncate text-gray-light ">
               <input
+                autoFocus
                 value={newFileName}
-                ref={inputRef}
                 onKeyUp={submitHandler}
                 type="text"
                 onChange={onFileTitleChangeHandler}
-                className="bg-gray p-1 w-full border border-gray-light rounded-sm outline-none focus:outline-none "
+                className="bg-gray p-1 text-xs w-full border border-gray-light rounded-sm outline-none focus:outline-none "
               />
             </p>
           </div>
         </div>
         {dataFiles?.files?.map((file, i) => {
           return (
-            <div
-              key={i}
-              className={`space-x-2 items-center cursor-pointer active:bg-gray flex`}
-            >
-              <div className="py-1 px-2 space-x-2 items-center cursor-pointer flex">
-                <img
-                  className="h-4"
-                  src={`${iconsBaseURL}${
-                    commands[file.extension] || "txt"
-                  }.svg`}
-                  alt=""
-                />
-                <p className="text-xs truncate text-gray-light ">{file.name}</p>
-              </div>
+            <div onClick={() => setActive(file.name)}>
+              {" "}
+              <File
+                setIsEditing={setIsEditing}
+                className={file.name === active ? "bg-gray" : ""}
+                isEditing={file.name === isEditing ?true :false}
+                key={i}
+                file={file}
+              />
             </div>
           );
         })}

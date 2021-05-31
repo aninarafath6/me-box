@@ -1,8 +1,18 @@
-import { FileType } from "./file.model";
-
+// create file interface
 export interface CreateFileAction {
-    type:Required<string>;
-    payload:{
-        name: string;
-    }
+  id: number;
+  name: string;
+  extension: any;
 }
+
+// delete file interface
+export interface DeleteFileAction {
+  id: number;
+}
+
+// edit file interface
+export interface EditFileAction {
+    id:number;
+    name:string
+}
+

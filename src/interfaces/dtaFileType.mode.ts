@@ -6,7 +6,7 @@ export interface dtaFileType {
   folders: FolderType[];
 }
 
-interface FolderType {
+export interface FolderType {
   name: string;
   isOpen:Required<boolean>;
   files: FileType[];
