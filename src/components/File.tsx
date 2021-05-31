@@ -108,6 +108,24 @@ const Files = ({ file, className, isEditing, setIsEditing }: FileProps) => {
       );
     }
   };
+  const setEditing =():void=>{
+    setIsEditing(file.name)
+    const ext = file.name.split(".").pop();
+    let valid = extensionTypes.filter((ex) => ex === ext);
+    if (valid[0]) {
+      setExtension(
+        file.name === "package.json"
+          ? "nodejs"
+          : file.name === "package.lock.json"
+          ? "nodejs"
+          : file.name === "yarn.lock"
+          ? "yarn"
+          : file.name === ".gitignore"
+          ? "git"
+          : valid[0]
+      );
+  }
+}
   return (
     <div
       className={`group justify-between space-x-2 items-center cursor-pointer flex ${className}`}
@@ -141,7 +159,7 @@ const Files = ({ file, className, isEditing, setIsEditing }: FileProps) => {
         }  pr-1 text-[#8a8a8a] `}
       >
         <PencilIcon
-          onClick={() => setIsEditing(file.name)}
+          onClick={setEditing}
           className="h-4 hover:text-white  focus:outline-none transition-all duration-300 ease-in-out"
         />
         <XIcon
